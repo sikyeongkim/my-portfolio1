@@ -1,6 +1,14 @@
 {
   "projects": [
     {
+      "id": "너티포비",
+      "brandTitle": "너티포비",
+      "brandDesc": "A brand built on controlled contradiction. Softness with an edge.",
+      "year": "2024",
+      "coverImage": "/너티포비/3bf14aa4d07f2eb396bfbecb27d823e7.jpg",
+      "publishedAt": "2026-05-30T14:19:23.833Z"
+    },
+    {
       "id": "구달",
       "brandTitle": "Goodal",
       "brandDesc": "Campaign and product imagery for a plant-based Korean skincare brand known for its vitamin C line.",
