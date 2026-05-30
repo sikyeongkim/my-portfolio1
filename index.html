@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Work</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0d0d0d;--white:#f7f6f4;--gray:#9a9a96;--border:#deddd9}
+body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:var(--white);color:var(--black);-webkit-font-smoothing:antialiased}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2.5rem;border-bottom:1px solid var(--border)}
+.nav-logo{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--black);text-decoration:none}
+.page-header{padding:5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border)}
+.page-title{font-size:clamp(3.5rem,9vw,8rem);font-weight:300;letter-spacing:-.04em;line-height:.88}
+.grid{display:grid;grid-template-columns:repeat(2,1fr)}
+.card{display:block;text-decoration:none;color:var(--black);border-bottom:1px solid var(--border);overflow:hidden}
+.card:nth-child(odd){border-right:1px solid var(--border)}
+.card-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#e8e7e5;transition:transform .5s ease}
+.card:hover .card-img{transform:scale(1.03)}
+.card-info{padding:1.4rem 2rem}
+.card-title{font-size:1.25rem;font-weight:300;letter-spacing:-.02em;margin-bottom:.4rem}
+.card-desc{font-size:.75rem;color:var(--gray);line-height:1.6;margin-bottom:.6rem}
+.card-year{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gray)}
+footer{padding:1.5rem 2.5rem;border-top:1px solid var(--border)}
+.footer-copy{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray)}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.card:nth-child(odd){border-right:none}}
+</style>
+</head><body>
+<nav><a class="nav-logo" href="/">Work</a></nav>
+<main>
+  <div class="page-header"><h1 class="page-title">Work</h1></div>
+  <div class="grid" id="grid"><div style="padding:3rem 2.5rem;color:#9a9a96;font-size:.8rem">Loading…</div></div>
+</main>
+<footer><span class="footer-copy">Selected Works</span></footer>
+<script>
+fetch('/work.json').then(r=>r.json()).then(({projects})=>{
+  const g=document.getElementById('grid');
+  if(!projects.length){g.innerHTML='<div style="padding:3rem 2.5rem;color:#9a9a96;font-size:.8rem">No projects yet.</div>';return;}
+  g.innerHTML=projects.map(p=>`<a class="card" href="/${p.id}/">
+    ${p.coverImage?'<img class="card-img" src="'+p.coverImage+'" alt="">':'<div class="card-img"></div>'}
+    <div class="card-info">
+      <div class="card-title">${p.brandTitle||p.id}</div>
+      ${p.brandDesc?'<div class="card-desc">'+p.brandDesc+'</div>':''}
+      <div class="card-year">${p.year||''}</div>
+    </div>
+  </a>`).join('');
+}).catch(()=>{document.getElementById('grid').innerHTML='<div style="padding:3rem 2.5rem;color:#9a9a96;font-size:.8rem">Could not load projects.</div>';});
+</script>
+</body></html>
