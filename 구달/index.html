@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Goodal</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0d0d0d;--white:#f7f6f4;--gray:#9a9a96;--border:#deddd9}
+html{scroll-behavior:smooth}
+body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:var(--white);color:var(--black);-webkit-font-smoothing:antialiased}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2.5rem;border-bottom:1px solid var(--border)}
+.nav-back{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--black);text-decoration:none}
+.nav-right{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray)}
+.lang-toggle{display:flex;align-items:center;gap:.4rem;background:none;border:1px solid var(--border);border-radius:2px;padding:.35rem .8rem;cursor:pointer;transition:border-color .2s;font-family:inherit}
+.lang-toggle:hover{border-color:var(--black)}
+.lang-opt{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);transition:color .2s}
+.lang-opt.active{color:var(--black)}
+.lang-sep{font-size:.65rem;color:var(--border)}
+.page-header{display:grid;grid-template-columns:1fr 1fr;align-items:end;padding:5rem 2.5rem 3.5rem;border-bottom:1px solid var(--border);gap:2rem}
+.page-title{font-size:clamp(3.5rem,9vw,8rem);font-weight:300;letter-spacing:-.04em;line-height:.88}
+.page-header-right{display:flex;flex-direction:column;align-items:flex-end;gap:1rem}
+.page-desc{font-size:.85rem;font-weight:300;color:var(--gray);line-height:1.7;text-align:right;max-width:300px}
+.page-meta{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gray)}
+.project-intro{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:2.5rem;padding:3.5rem 2.5rem 3rem;border-bottom:1px solid var(--border)}
+.proj-num{font-size:clamp(5rem,12vw,10rem);font-weight:300;letter-spacing:-.06em;line-height:1;color:var(--border)}
+.proj-info{padding-bottom:.4rem}
+.proj-product{font-size:clamp(1.8rem,4vw,3.5rem);font-weight:300;letter-spacing:-.03em;line-height:1;margin-bottom:.7rem}
+.proj-type{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gray)}
+.meta-row{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border)}
+.meta-item{padding:1.3rem 2.5rem;border-right:1px solid var(--border)}
+.meta-item:last-child{border-right:none}
+.meta-label{display:block;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);margin-bottom:.35rem}
+.meta-value{font-size:.83rem;font-weight:400}
+.hero img,.hero video{width:100%;height:auto;display:block}
+.text-block{display:grid;grid-template-columns:200px 1fr;gap:2rem;padding:4rem 2.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.text-label{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);padding-top:.25rem}
+.text-body{font-size:1.15rem;font-weight:300;line-height:1.78;max-width:640px}
+.text-large{font-size:1.7rem;line-height:1.55;font-weight:300}
+.full-img img,.full-img video{width:100%;height:66vh;object-fit:cover;object-position:center 30%;display:block}
+.two-col{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.two-col img,.two-col video{width:100%;height:75vh;object-fit:cover;object-position:center top;display:block}
+.two-col>*:first-child{border-right:1px solid var(--border)}
+.section-label{padding:1.2rem 2.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.section-label span{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gray)}
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--border)}
+.product-cell{overflow:hidden;border-right:1px solid var(--border)}
+.product-cell:last-child{border-right:none}
+.product-cell img,.product-cell video{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.note-block{display:grid;grid-template-columns:200px 1fr;gap:2rem;padding:3rem 2.5rem;border-bottom:1px solid var(--border)}
+.note-body{font-size:.9rem;font-weight:300;line-height:1.85;color:var(--gray);max-width:560px}
+footer{padding:1.5rem 2.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.footer-left{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray)}
+@media(max-width:700px){
+  .page-header{grid-template-columns:1fr}
+  .meta-row{grid-template-columns:repeat(2,1fr)}
+  .text-block,.note-block{grid-template-columns:1fr}
+  .two-col{grid-template-columns:1fr}
+  .product-grid{grid-template-columns:repeat(2,1fr)!important}
+}</style>
+</head><body>
+<nav><a href="#" class="nav-back">← Work</a><span class="nav-right">2024</span></nav>
+<main>
+<div class="page-header">
+  <h1 class="page-title">Goodal</h1>
+  <div class="page-header-right">
+    <p class="page-desc">Campaign and product imagery for a plant-based Korean skincare brand known for its vitamin C line.</p>
+    <span class="page-meta">Client — 2024</span>
+  </div>
+</div>
+
+    <div class="project-intro">
+      <span class="proj-num">01</span>
+      <div class="proj-info">
+        <h2 class="proj-product" >Green Tangerine Vita C</h2>
+        <span class="proj-type" >Skincare — Serum</span>
+      </div>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">Client</span><span class="meta-value">Goodal</span></div>
+      <div class="meta-item"><span class="meta-label">Year</span><span class="meta-value">2024</span></div>
+      <div class="meta-item"><span class="meta-label" >Product</span><span class="meta-value" >Brightening Serum</span></div>
+      <div class="meta-item"><span class="meta-label">Scope</span><span class="meta-value" >Art Direction, Campaign</span></div>
+    </div>
+    
+      <div class="hero"><img src="201451_71291_4330.jpg" alt=""></div>
+      
+    <div class="text-block"><span class="text-label">Brief</span>
+      <p class="text-body">Goodal's vitamin C line needed a visual register that felt botanical without tipping into the pastoral. The product is precise — a high-concentration serum with a single clear function. The imagery had to match that.</p>
+    </div>
+      <div class="full-img"><img src="71f29b242895db7a131b25ca3bc35e37.jpg" alt=""></div>
+      <div class="two-col"><img src="88c0404d56d3a5307fb32367f75e47a1.jpg" alt=""><img src="images.jpeg" alt=""></div>
+      
+      <div class="full-img"><img src="c6GZJCFrZxI6Q8-kxdov1PuwObV4EdvmIB_7XCbKg8Uxeyque0kLIOzbctmNGnhpXo3DgfUStDNChyBdcym6hbgHtmXi0VakzIyIdvf2mz6IsE3ccrewwBbqALnn3-WrVEHuRAPr3m2558LJq-zd8A.webp" alt=""></div>
+    
+    <div class="note-block"><span class="text-label">Note</span>
+      <p class="note-body">Light was kept cool and even. Green against white, nothing layered. The tangerine reads as ingredient, not decoration.</p>
+    </div>
+<footer><span class="footer-left">Goodal — 2024</span></footer>
+</main></body></html>
