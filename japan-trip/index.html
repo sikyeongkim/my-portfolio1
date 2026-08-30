@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🇯🇵 도쿄 3박4일 · 9.3–9.6</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f6f4f1; --surface: #fff; --text: #1a1a1a; --sub: #888;
+      --border: #e4e1db; --red: #c94b3a; --red-light: #fdf0ee;
+      --blue: #3a6bc9; --blue-light: #eef2fd;
+      --green: #3a8c5c; --green-light: #eef7f2;
+      --orange: #c97a35; --orange-light: #fdf5ee;
+      --gray-light: #eeebe6; --purple: #6a5acd; --purple-light: #f0eeff;
+      --shadow: 0 1px 8px rgba(0,0,0,0.07);
+    }
+    body { font-family: 'Noto Sans KR', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* Header */
+    .header { background: #1a1a1a; color: #fff; padding: 36px 24px 30px; text-align: center; }
+    .header-emoji { font-size: 36px; line-height: 1; margin-bottom: 10px; }
+    .header-title { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .header-date { font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 300; margin-bottom: 14px; }
+    .header-hotel { display: inline-block; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 7px 16px; font-size: 12px; color: rgba(255,255,255,0.75); }
+
+    /* Tabs */
+    .tabs { position: sticky; top: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; }
+    .tab { flex: 1; padding: 13px 6px 11px; text-align: center; font-size: 13px; font-weight: 600; color: var(--sub); cursor: pointer; border-bottom: 2.5px solid transparent; transition: all 0.18s; line-height: 1.3; }
+    .tab.active { color: var(--red); border-bottom-color: var(--red); }
+    .tab-sub { font-size: 11px; font-weight: 400; margin-top: 2px; opacity: 0.7; }
+
+    /* Day panels */
+    .day-panel { display: none; }
+    .day-panel.active { display: block; }
+
+    /* Day intro */
+    .day-intro { max-width: 640px; margin: 0 auto; padding: 22px 20px 0; }
+    .day-intro-title { font-size: 17px; font-weight: 700; margin-bottom: 5px; line-height: 1.4; }
+    .day-intro-sub { font-size: 13px; color: var(--sub); line-height: 1.6; }
+
+    /* Note */
+    .note-wrap { max-width: 640px; margin: 14px auto 0; padding: 0 20px; }
+    .note-inner { background: #fffbea; border: 1px solid #f0e07a; border-radius: 10px; padding: 11px 14px; font-size: 13px; color: #7a6400; line-height: 1.7; }
+
+    /* Timeline */
+    .timeline { max-width: 640px; margin: 0 auto; padding: 20px 20px 80px; }
+    .tl-item { display: flex; gap: 14px; position: relative; }
+    .tl-item:not(:last-child) .tl-line-wrap::after { content: ''; position: absolute; left: 15px; top: 32px; bottom: 0; width: 2px; background: var(--border); }
+    .tl-line-wrap { position: relative; width: 32px; flex-shrink: 0; }
+    .tl-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .tl-right { flex: 1; padding-bottom: 18px; }
+    .tl-time { font-size: 11.5px; font-weight: 600; color: var(--sub); margin-bottom: 5px; letter-spacing: 0.3px; }
+    .tl-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); position: relative; }
+    .tl-card.hl { border-color: var(--red); border-width: 1.5px; }
+    .tl-name { font-size: 15px; font-weight: 600; margin-bottom: 5px; line-height: 1.4; }
+    .tl-desc { font-size: 13px; color: #555; line-height: 1.7; }
+
+    /* Tags */
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin-bottom: 7px; }
+    .tag-move   { background: var(--gray-light); color: #666; }
+    .tag-shop   { background: var(--blue-light);   color: var(--blue); }
+    .tag-food   { background: var(--orange-light);  color: var(--orange); }
+    .tag-cafe   { background: var(--orange-light);  color: var(--orange); }
+    .tag-cult   { background: var(--green-light);   color: var(--green); }
+    .tag-rest   { background: var(--red-light);     color: var(--red); }
+    .tag-hotel  { background: var(--purple-light);  color: var(--purple); }
+    .d-move  { background: var(--gray-light); }
+    .d-shop  { background: var(--blue-light); }
+    .d-food  { background: var(--orange-light); }
+    .d-cult  { background: var(--green-light); }
+    .d-rest  { background: var(--red-light); }
+    .d-hotel { background: var(--purple-light); }
+    .rsv { display: inline-flex; align-items: center; gap: 4px; background: var(--red); color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 700; margin-bottom: 7px; }
+    .opt { display: inline-block; border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; font-size: 11px; color: var(--sub); margin-bottom: 7px; }
+    .stars { color: var(--red); font-size: 11px; margin-left: 5px; }
+
+    /* Map */
+    .map-area { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
+    .map-btn-add { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 6px; background: var(--gray-light); color: var(--sub); font-size: 12px; font-family: inherit; font-weight: 500; border: none; cursor: pointer; transition: background 0.15s; }
+    .map-btn-add:hover { background: #e3e0da; }
+    .map-btn-open { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 6px; background: var(--blue-light); color: var(--blue); font-size: 12px; font-family: inherit; font-weight: 500; border: none; cursor: pointer; text-decoration: none; transition: background 0.15s; }
+    .map-btn-open:hover { background: #dce6fb; }
+    .map-edit-btn { display: inline-flex; align-items: center; padding: 5px 8px; border-radius: 6px; background: none; color: var(--sub); font-size: 12px; font-family: inherit; border: 1px solid var(--border); cursor: pointer; margin-left: 6px; }
+    .map-edit-btn:hover { background: var(--gray-light); }
+    .map-input-row { margin-top: 8px; display: none; gap: 6px; }
+    .map-input-row.open { display: flex; }
+    .map-input-row input { flex: 1; padding: 7px 10px; border-radius: 7px; border: 1px solid var(--border); font-size: 12px; font-family: inherit; outline: none; background: var(--bg); }
+    .map-input-row input:focus { border-color: var(--blue); }
+    .map-save-btn { padding: 7px 12px; border-radius: 7px; background: var(--blue); color: #fff; font-size: 12px; font-family: inherit; font-weight: 600; border: none; cursor: pointer; white-space: nowrap; }
+    .map-cancel-btn { padding: 7px 10px; border-radius: 7px; background: var(--gray-light); color: var(--sub); font-size: 12px; font-family: inherit; border: none; cursor: pointer; }
+
+    /* ── Edit mode ── */
+    .edit-fab {
+      position: fixed; bottom: 24px; right: 20px; z-index: 300;
+      display: flex; align-items: center; gap: 7px;
+      padding: 11px 20px; border-radius: 50px;
+      background: var(--text); color: #fff;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+      transition: background 0.18s;
+    }
+    .edit-fab.on { background: var(--green); }
+
+    /* Edit mode styles */
+    body.edit-mode .editable {
+      background: #fffef2;
+      border-radius: 4px;
+      outline: 1.5px dashed #e8d060;
+      padding: 2px 5px;
+      cursor: text;
+      min-height: 1.2em;
+      display: inline-block;
+      width: 100%;
+    }
+    body.edit-mode .tl-time.editable { display: block; }
+    body.edit-mode .tl-card { border-color: #d4c87a !important; border-width: 1.5px !important; }
+
+    .del-btn {
+      display: none;
+      position: absolute; top: -9px; right: -9px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--red); color: #fff;
+      border: none; cursor: pointer;
+      align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; line-height: 1;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    body.edit-mode .del-btn { display: flex; }
+
+    .add-item-btn {
+      display: none;
+      width: 100%; margin-top: 4px; padding: 12px;
+      border: 1.5px dashed var(--border); border-radius: 12px;
+      background: none; color: var(--sub); font-family: inherit;
+      font-size: 13px; cursor: pointer; transition: all 0.15s;
+    }
+    .add-item-btn:hover { background: var(--gray-light); border-color: var(--sub); }
+    body.edit-mode .add-item-btn { display: block; }
+
+    /* Edit toolbar */
+    .edit-toolbar {
+      display: none;
+      position: fixed; bottom: 80px; right: 20px; z-index: 299;
+      flex-direction: column; gap: 8px; align-items: flex-end;
+    }
+    body.edit-mode .edit-toolbar { display: flex; }
+    .toolbar-btn {
+      padding: 8px 16px; border-radius: 50px;
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      border: none; cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .toolbar-reset { background: var(--surface); color: var(--red); border: 1px solid var(--red); }
+
+    /* Add item modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.4); align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border-radius: 16px; padding: 24px;
+      width: 100%; max-width: 400px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    }
+    .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+    .modal-field { margin-bottom: 12px; }
+    .modal-field label { display: block; font-size: 12px; color: var(--sub); margin-bottom: 4px; font-weight: 500; }
+    .modal-field input, .modal-field textarea, .modal-field select {
+      width: 100%; padding: 9px 12px; border-radius: 8px;
+      border: 1px solid var(--border); font-family: inherit; font-size: 13px;
+      outline: none; background: var(--bg);
+    }
+    .modal-field input:focus, .modal-field textarea:focus { border-color: var(--blue); }
+    .modal-field textarea { resize: vertical; min-height: 70px; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
+    .modal-ok { flex: 1; padding: 11px; border-radius: 8px; background: var(--text); color: #fff; font-family: inherit; font-size: 14px; font-weight: 600; border: none; cursor: pointer; }
+    .modal-cancel { padding: 11px 16px; border-radius: 8px; background: var(--gray-light); color: var(--sub); font-family: inherit; font-size: 14px; border: none; cursor: pointer; }
+
+    /* Footer */
+    .footer { text-align: center; padding: 28px 20px; font-size: 12px; color: var(--sub); }
+    @media (max-width: 400px) { .header-title { font-size: 20px; } .tab { font-size: 12px; } }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-emoji">🇯🇵</div>
+  <div class="header-title">도쿄 3박 4일</div>
+  <div class="header-date">2025년 9월 3일 — 9월 6일 · 시부야 기점</div>
+  <div class="header-hotel">🏨 도미인 프리미엄 시부야 진구마에</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showDay(1)">DAY 1<div class="tab-sub">9/3 수</div></div>
+  <div class="tab" onclick="showDay(2)">DAY 2<div class="tab-sub">9/4 목</div></div>
+  <div class="tab" onclick="showDay(3)">DAY 3<div class="tab-sub">9/5 금</div></div>
+  <div class="tab" onclick="showDay(4)">DAY 4<div class="tab-sub">9/6 토</div></div>
+</div>
+
+<div id="panels"></div>
+
+<!-- Edit toolbar (reset only) -->
+<div class="edit-toolbar">
+  <button class="toolbar-btn toolbar-reset" onclick="resetAll()">↺ 초기화</button>
+</div>
+
+<!-- Floating edit button -->
+<button class="edit-fab" id="editFab" onclick="toggleEdit()">✏️ 수정하기</button>
+
+<!-- Add item modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h3>+ 항목 추가</h3>
+    <div class="modal-field">
+      <label>시간</label>
+      <input type="text" id="mi-time" placeholder="예: 14:00 – 15:00">
+    </div>
+    <div class="modal-field">
+      <label>태그 종류</label>
+      <select id="mi-tag">
+        <option value="move">이동</option>
+        <option value="shop">쇼핑</option>
+        <option value="food">식사</option>
+        <option value="cafe">카페</option>
+        <option value="cult">문화체험</option>
+        <option value="rest">휴식/자유</option>
+        <option value="hotel">숙소</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>장소/제목</label>
+      <input type="text" id="mi-name" placeholder="장소 이름">
+    </div>
+    <div class="modal-field">
+      <label>설명</label>
+      <textarea id="mi-desc" placeholder="세부 내용"></textarea>
+    </div>
+    <div class="modal-field">
+      <label>구글맵 URL (선택)</label>
+      <input type="url" id="mi-map" placeholder="https://maps.google.com/...">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeAddModal()">취소</button>
+      <button class="modal-ok" onclick="confirmAdd()">추가</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">🇯🇵 도쿄 3박4일 · 2025.09.03–09.06</div>
+
+<script>
+// ─── Default data ───────────────────────────────────────────────
+const TAG_META = {
+  move:  { label: '이동',    cls: 'tag-move',  dot: 'd-move',  emoji: '🚶' },
+  shop:  { label: '쇼핑',   cls: 'tag-shop',  dot: 'd-shop',  emoji: '🛍️' },
+  food:  { label: '식사',    cls: 'tag-food',  dot: 'd-food',  emoji: '🍽️' },
+  cafe:  { label: '카페',    cls: 'tag-cafe',  dot: 'd-food',  emoji: '☕' },
+  cult:  { label: '문화체험', cls: 'tag-cult', dot: 'd-cult',  emoji: '🎍' },
+  rest:  { label: '휴식',    cls: 'tag-rest',  dot: 'd-rest',  emoji: '🌿' },
+  hotel: { label: '숙소',    cls: 'tag-hotel', dot: 'd-hotel', emoji: '🏨' },
+};
+
+const DEFAULTS = [
+  {
+    title: '나리타 → 오모테산도 ★★★★★',
+    sub: '입국 후 숙소 직행. 오후는 오모테산도 라인 집중 탐방. 지하철 0회.',
+    note: '💡 비행기 지연 시 우선순위: <strong>Artek → 오모테산도 힐즈 → HAY</strong> (마감 빠른 순)',
+    items: [
+      { id:'d1-0', time:'12:00', type:'move', dot:'✈️', name:'나리타 도착', desc:'입국심사 + 수하물 수취 후 시부야로 이동', hl:false, badge:null, mapId:null },
+      { id:'d1-1', time:'15:00 – 15:30', type:'hotel', dot:'🏨', name:'체크인', desc:'도미인 프리미엄 시부야 진구마에\n짐 풀고 출발 → 오모테산도까지 도보 약 15분', hl:false, badge:null, mapId:'hotel' },
+      { id:'d1-2', time:'15:45 – 16:30', type:'shop', dot:'🛋️', name:'Artek Tokyo Store', desc:'19시 마감이라 제일 먼저. 가구부터 작은 소품까지.', hl:true, badge:null, mapId:'artek' },
+      { id:'d1-3', time:'16:30 – 17:10', type:'shop', dot:'🪑', name:'HAY TOKYO', desc:'GYRE B1 — Artek 바로 옆, 한 세트로 보기', hl:false, badge:null, mapId:'hay' },
+      { id:'d1-4', time:'17:20 – 19:00', type:'shop', dot:'🏬', name:'오모테산도 힐즈 ★', desc:'1시간 40분 넉넉하게. CDG부터 시작해서 천천히.', hl:true, badge:null, mapId:'omotesando-hills' },
+      { id:'d1-5', time:'19:00 – 20:00', type:'shop', dot:'🛍️', name:'캣스트리트 / 하라주쿠 골목', desc:'체력 남으면 RAGTAG 하라주쿠. 못 보면 DAY 2로.', hl:false, badge:null, mapId:'catstreet' },
+      { id:'d1-6', time:'20:30~', type:'food', dot:'🍽️', name:'숙소 주변 / 시부야 저녁', desc:'돌아오는 길에 식사', hl:false, badge:null, mapId:null },
+    ]
+  },
+  {
+    title: '하라주쿠·우라하라 → 신주쿠 야키니쿠 ★★★★',
+    sub: '오전은 하라주쿠 세컨핸드 집중. 오후는 이세탄 → 17:30 야키니쿠.',
+    note: null,
+    items: [
+      { id:'d2-0', time:'10:30', type:'move', dot:'🚶', name:'숙소 출발', desc:'도보 10~15분 → 하라주쿠', hl:false, badge:null, mapId:null },
+      { id:'d2-1', time:'11:00 – 13:30', type:'shop', dot:'🧥', name:'하라주쿠 · 우라하라', desc:'RAGTAG / BerBerJin / Kinji / AMORE\n매장별 시간 정하지 말고 2시간 30분 통으로.\nDAY 1 "어제 그거 살걸…" 생겼으면 재방문도 OK.', hl:true, badge:null, mapId:'uraharajuku' },
+      { id:'d2-2', time:'13:30 – 14:15', type:'food', dot:'🍜', name:'가벼운 점심', desc:'⚠️ 17:30에 야키니쿠 있으니 많이 먹지 말기', hl:false, badge:null, mapId:null },
+      { id:'d2-3', time:'14:15', type:'move', dot:'🚇', name:'메이지진구마에역 → 신주쿠산초메역', desc:'후쿠토신선 직통 · 환승 없음', hl:false, badge:null, mapId:null },
+      { id:'d2-4', time:'14:40 – 15:50', type:'shop', dot:'🏬', name:'이세탄 신주쿠', desc:'패션/뷰티/디스플레이 중심. 전층 다 돌 필요 없음.', hl:false, badge:null, mapId:'isetan' },
+      { id:'d2-5', time:'15:50 – 16:40', type:'shop', dot:'👗', name:'신주쿠 세컨핸드 1~2곳', desc:'RAGTAG 신주쿠 등. 정말 궁금한 곳만.', hl:false, badge:null, mapId:'ragtag-shinjuku' },
+      { id:'d2-6', time:'16:40 – 17:20', type:'rest', dot:'☕', name:'카페 / 가부키초 방향 이동', desc:'야키니쿠 방향으로 도보 이동', hl:false, badge:null, mapId:null },
+      { id:'d2-7', time:'17:30', type:'food', dot:'🥩', name:'야키니쿠 ★', desc:'歌舞伎町焼肉 一頭や 新宿区役所通り店', hl:true, badge:'rsv', mapId:'yakiniku' },
+      { id:'d2-8', time:'19:00~', type:'rest', dot:'🌃', name:'신주쿠 밤 구경', desc:'가부키초 산책 + 늦게 닫는 매장 1곳\n→ 후쿠토신선 → 메이지진구마에 → 도보 숙소', hl:false, badge:null, mapId:null },
+    ]
+  },
+  {
+    title: '나카메구로 → 다이칸야마 → 다도 ★★★★★',
+    sub: '쇼핑 최애날이 DAY 1이면, 동네 최애날은 DAY 3.',
+    note: null,
+    items: [
+      { id:'d3-0', time:'10:15', type:'move', dot:'🚇', name:'숙소 → 나카메구로', desc:'메이지진구마에역 → 후쿠토신선 + 도큐 도요코선 직통', hl:false, badge:null, mapId:null },
+      { id:'d3-1', time:'11:00 – 11:45', type:'cafe', dot:'🍵', name:'Chiyaba', desc:'차 한 잔으로 하루 시작. ⚠️ 월요일 휴무 시 다른 카페로.', hl:false, badge:null, mapId:'chiyaba' },
+      { id:'d3-2', time:'11:45 – 13:15', type:'shop', dot:'🌊', name:'나카메구로', desc:'메구로강만 보고 끝내지 말기.\n강 주변 골목 + 작은 편집숍 + 빈티지/레코드 위주.', hl:true, badge:null, mapId:'nakameguro' },
+      { id:'d3-3', time:'13:15 – 14:00', type:'food', dot:'🍽️', name:'점심', desc:'나카메구로 근처', hl:false, badge:null, mapId:null },
+      { id:'d3-4', time:'14:00', type:'move', dot:'🚶', name:'나카메구로 → 다이칸야마', desc:'15~20분 도보. 한 정거장이지만 걸어가는 게 훨씬 좋음.', hl:false, badge:null, mapId:null },
+      { id:'d3-5', time:'14:20 – 15:40', type:'shop', dot:'🏘️', name:'다이칸야마', desc:'저장한 편집숍 / 빈티지 / 생활용품.\nT-SITE 관심 있으면 포함.', hl:true, badge:null, mapId:'daikanyama' },
+      { id:'d3-6', time:'16:00 – 17:00', type:'cult', dot:'🍵', name:'Uguisu-An 다도 체험 ★★★', desc:'1시간짜리라 일정에 딱 맞음.', hl:true, badge:'rsv', mapId:'uguisuan' },
+      { id:'d3-7', time:'17:00', type:'rest', dot:'🔀', name:'체력 상황에 따라', desc:'A. 다이칸야마가 아직 좋다 → 더 보기 → 쇼토/오쿠시부 → 시부야\nB. 충분히 봤다 → 에비스니시 도보 10~15분 → 작은 숍/세컨핸드 1시간', hl:false, badge:'opt', mapId:null },
+      { id:'d3-8', time:'19:00~', type:'food', dot:'🌆', name:'시부야 방향 복귀 + 저녁', desc:'숙소까지 도보로', hl:false, badge:null, mapId:null },
+    ]
+  },
+  {
+    title: 'DULTON → THINK OF THINGS → 나리타 ✈️',
+    sub: "짐 맡기고 주변만 원 그리듯. 새로운 곳 찾지 말고 '회수'만.",
+    note: null,
+    items: [
+      { id:'d4-0', time:'09:30 – 10:00', type:'hotel', dot:'🧳', name:'체크아웃 + 짐 맡김', desc:'아침/커피 먹고 출발', hl:false, badge:null, mapId:null },
+      { id:'d4-1', time:'11:00 – 11:45', type:'shop', dot:'🔧', name:'DULTON Jinnan Shop ★', desc:'숙소 바로 근처. 마지막 날에 보는 게 제일 효율적.', hl:true, badge:null, mapId:'dulton' },
+      { id:'d4-2', time:'11:45', type:'move', dot:'🚶', name:'DULTON → THINK OF THINGS', desc:'15~20분 도보', hl:false, badge:null, mapId:null },
+      { id:'d4-3', time:'12:05 – 12:50', type:'shop', dot:'📐', name:'THINK OF THINGS', desc:'문구 / 생활용품 / 가구 / 잡화', hl:false, badge:null, mapId:'thinkofthings' },
+      { id:'d4-4', time:'13:00 – 13:40', type:'shop', dot:'🎯', name:'마지막 회수', desc:"DAY 1~2에 고민했던 물건 사러 가기.\n새로운 곳 찾지 말 것 — 회수만.", hl:false, badge:null, mapId:null },
+      { id:'d4-5', time:'13:40 – 14:10', type:'food', dot:'🍱', name:'가벼운 점심 / 테이크아웃', desc:'', hl:false, badge:null, mapId:null },
+      { id:'d4-6', time:'14:15', type:'hotel', dot:'🧳', name:'짐 픽업', desc:'시부야 → 나리타 이동 시작', hl:false, badge:null, mapId:null },
+      { id:'d4-7', time:'16:00 – 16:30', type:'move', dot:'🚃', name:'나리타 도착', desc:'면세점 쇼핑 + 저녁', hl:false, badge:null, mapId:null },
+      { id:'d4-8', time:'19:00', type:'move', dot:'🛫', name:'한국행 ✈️', desc:'수고했어요 🙂', hl:true, badge:null, mapId:null },
+    ]
+  }
+];
+
+// ─── State ──────────────────────────────────────────────────────
+const MAPS_KEY    = 'tokyo_maps_2025';
+const CONTENT_KEY = 'tokyo_content_2025';
+let mapUrls = {};
+let savedContent = null; // { days: [...] } overrides
+let editMode = false;
+let addTargetDay = -1;
+let _uid = Date.now();
+
+function uid() { return 'u' + (_uid++); }
+
+// ─── Persistence ────────────────────────────────────────────────
+function loadMaps() {
+  try { mapUrls = JSON.parse(localStorage.getItem(MAPS_KEY)) || {}; } catch(e) { mapUrls = {}; }
+}
+function saveMaps() { localStorage.setItem(MAPS_KEY, JSON.stringify(mapUrls)); }
+function loadContent() {
+  try { savedContent = JSON.parse(localStorage.getItem(CONTENT_KEY)); } catch(e) { savedContent = null; }
+}
+function saveContent() {
+  // Capture current DOM state
+  const days = [];
+  document.querySelectorAll('.day-panel').forEach((panel, di) => {
+    const intro = panel.querySelector('.day-intro');
+    const noteEl = panel.querySelector('.note-inner');
+    const items = [];
+    panel.querySelectorAll('.tl-item[data-id]').forEach(itemEl => {
+      const id = itemEl.dataset.id;
+      const type = itemEl.dataset.type;
+      const dot  = itemEl.dataset.dot;
+      const hl   = itemEl.dataset.hl === 'true';
+      const badge= itemEl.dataset.badge || null;
+      const mapId= itemEl.dataset.mapId || null;
+      const time = itemEl.querySelector('.tl-time')?.innerText || '';
+      const name = itemEl.querySelector('.tl-name')?.innerText || '';
+      const desc = itemEl.querySelector('.tl-desc')?.innerText || '';
+      items.push({ id, time, type, dot, name, desc, hl, badge, mapId });
+    });
+    days.push({
+      title: intro?.querySelector('.day-intro-title')?.innerText || '',
+      sub:   intro?.querySelector('.day-intro-sub')?.innerText   || '',
+      note:  noteEl ? noteEl.innerHTML : null,
+      items
+    });
+  });
+  localStorage.setItem(CONTENT_KEY, JSON.stringify({ days }));
+  savedContent = { days };
+}
+
+// ─── Render ─────────────────────────────────────────────────────
+function getData() {
+  if (!savedContent) return DEFAULTS;
+  // Merge saved into defaults (days may differ)
+  return savedContent.days.length ? savedContent.days : DEFAULTS;
+}
+
+function renderAll() {
+  const data = getData();
+  const container = document.getElementById('panels');
+  container.innerHTML = '';
+  data.forEach((day, di) => {
+    container.appendChild(renderDay(day, di));
+  });
+  // re-apply map buttons
+  document.querySelectorAll('.map-area').forEach(el => renderMapArea(el));
+  // activate first tab
+  document.querySelectorAll('.day-panel')[0]?.classList.add('active');
+}
+
+function renderDay(day, di) {
+  const panel = document.createElement('div');
+  panel.className = 'day-panel';
+  panel.id = 'p' + (di + 1);
+
+  // intro
+  const intro = document.createElement('div');
+  intro.className = 'day-intro';
+  intro.innerHTML = `
+    <div class="day-intro-title">${esc(day.title)}</div>
+    <div class="day-intro-sub">${esc(day.sub)}</div>`;
+  panel.appendChild(intro);
+
+  // note
+  if (day.note) {
+    const nw = document.createElement('div');
+    nw.className = 'note-wrap';
+    nw.innerHTML = `<div class="note-inner">${day.note}</div>`;
+    panel.appendChild(nw);
+  }
+
+  // timeline
+  const tl = document.createElement('div');
+  tl.className = 'timeline';
+  tl.dataset.day = di;
+
+  day.items.forEach(item => {
+    tl.appendChild(renderItem(item));
+  });
+
+  // add button (edit mode only)
+  const addBtn = document.createElement('button');
+  addBtn.className = 'add-item-btn';
+  addBtn.textContent = '+ 항목 추가';
+  addBtn.onclick = () => openAddModal(di);
+  tl.appendChild(addBtn);
+
+  panel.appendChild(tl);
+  return panel;
+}
+
+function renderItem(item) {
+  const tm = TAG_META[item.type] || TAG_META.rest;
+  const wrap = document.createElement('div');
+  wrap.className = 'tl-item';
+  wrap.dataset.id    = item.id;
+  wrap.dataset.type  = item.type;
+  wrap.dataset.dot   = item.dot || tm.emoji;
+  wrap.dataset.hl    = item.hl ? 'true' : 'false';
+  wrap.dataset.badge = item.badge || '';
+  wrap.dataset.mapId = item.mapId || '';
+
+  const dot = item.dot || tm.emoji;
+
+  let badgeHtml = '';
+  if (item.badge === 'rsv') badgeHtml = '<div class="rsv">📌 예약</div>';
+  else if (item.badge === 'opt') badgeHtml = '<div class="opt">선택지</div>';
+
+  let mapAreaHtml = item.mapId ? `<div class="map-area" data-id="${item.mapId}"></div>` : '';
+
+  const descHtml = esc(item.desc).replace(/\n/g, '<br>');
+
+  wrap.innerHTML = `
+    <div class="tl-line-wrap">
+      <div class="tl-dot ${tm.dot}">${dot}</div>
+    </div>
+    <div class="tl-right">
+      <div class="tl-time editable" contenteditable="false">${esc(item.time)}</div>
+      <div class="tl-card${item.hl ? ' hl' : ''}">
+        <button class="del-btn" onclick="deleteItem(this)" title="삭제">×</button>
+        ${badgeHtml}
+        <div class="tag ${tm.cls}">${tm.label}</div>
+        <div class="tl-name editable" contenteditable="false">${esc(item.name)}</div>
+        <div class="tl-desc editable" contenteditable="false">${descHtml}</div>
+        ${mapAreaHtml}
+      </div>
+    </div>`;
+  return wrap;
+}
+
+function esc(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─── Map feature ────────────────────────────────────────────────
+function renderMapArea(el) {
+  const id = el.dataset.id;
+  if (!id) return;
+  const url = mapUrls[id];
+  el.innerHTML = '';
+
+  if (url) {
+    const a = document.createElement('a');
+    a.className = 'map-btn-open';
+    a.href = url; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = '🗺️ 지도 열기';
+    const eb = document.createElement('button');
+    eb.className = 'map-edit-btn'; eb.textContent = '✏️'; eb.title = '수정';
+    eb.onclick = () => showMapInput(el, id);
+    el.appendChild(a); el.appendChild(eb);
+  } else {
+    const ab = document.createElement('button');
+    ab.className = 'map-btn-add'; ab.textContent = '+ 지도 추가';
+    ab.onclick = () => showMapInput(el, id);
+    el.appendChild(ab);
+  }
+
+  const row = document.createElement('div');
+  row.className = 'map-input-row'; row.id = 'mi-' + id;
+  row.innerHTML = `<input type="url" placeholder="Google Maps URL 붙여넣기..." />
+    <button class="map-save-btn" onclick="saveMap('${id}')">저장</button>
+    <button class="map-cancel-btn" onclick="cancelMapInput('${id}')">취소</button>`;
+  el.appendChild(row);
+}
+
+function showMapInput(el, id) {
+  const row = document.getElementById('mi-' + id);
+  row.classList.add('open');
+  const inp = row.querySelector('input');
+  inp.value = mapUrls[id] || '';
+  inp.focus();
+  inp.onkeydown = e => { if (e.key === 'Enter') saveMap(id); };
+}
+function saveMap(id) {
+  const row = document.getElementById('mi-' + id);
+  const val = row.querySelector('input').value.trim();
+  if (val) { mapUrls[id] = val; saveMaps(); }
+  const area = row.parentElement;
+  renderMapArea(area);
+}
+function cancelMapInput(id) {
+  document.getElementById('mi-' + id)?.classList.remove('open');
+}
+
+// ─── Edit mode ──────────────────────────────────────────────────
+function toggleEdit() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  const fab = document.getElementById('editFab');
+  fab.textContent = editMode ? '✓ 완료' : '✏️ 수정하기';
+  fab.classList.toggle('on', editMode);
+
+  document.querySelectorAll('.editable').forEach(el => {
+    el.contentEditable = editMode ? 'true' : 'false';
+  });
+
+  if (!editMode) saveContent();
+}
+
+function deleteItem(btn) {
+  const item = btn.closest('.tl-item');
+  if (confirm('이 항목을 삭제할까요?')) {
+    item.remove();
+    saveContent();
+  }
+}
+
+function resetAll() {
+  if (!confirm('모든 수정 내용을 초기화할까요?')) return;
+  localStorage.removeItem(CONTENT_KEY);
+  savedContent = null;
+  const wasEdit = editMode;
+  if (editMode) toggleEdit(); // exit edit mode first
+  renderAll();
+  if (wasEdit) {
+    // re-enter edit mode
+    setTimeout(toggleEdit, 50);
+  }
+  showDay(1);
+}
+
+// ─── Add item ───────────────────────────────────────────────────
+function openAddModal(dayIdx) {
+  addTargetDay = dayIdx;
+  document.getElementById('addModal').classList.add('open');
+  document.getElementById('mi-time').value = '';
+  document.getElementById('mi-name').value = '';
+  document.getElementById('mi-desc').value = '';
+  document.getElementById('mi-map').value  = '';
+  document.getElementById('mi-tag').value  = 'shop';
+}
+function closeAddModal() {
+  document.getElementById('addModal').classList.remove('open');
+}
+function confirmAdd() {
+  const time  = document.getElementById('mi-time').value.trim();
+  const type  = document.getElementById('mi-tag').value;
+  const name  = document.getElementById('mi-name').value.trim();
+  const desc  = document.getElementById('mi-desc').value.trim();
+  const mapUrl= document.getElementById('mi-map').value.trim();
+  if (!name) { alert('장소/제목을 입력해주세요.'); return; }
+
+  const id = 'custom-' + uid();
+  const mapId = mapUrl ? id + '-map' : null;
+  if (mapUrl && mapId) { mapUrls[mapId] = mapUrl; saveMaps(); }
+
+  const item = { id, time, type, dot: TAG_META[type]?.emoji || '📍', name, desc, hl: false, badge: null, mapId };
+  const newEl = renderItem(item);
+
+  // In edit mode, make editable
+  newEl.querySelectorAll('.editable').forEach(el => { el.contentEditable = 'true'; });
+
+  const tl = document.querySelector(`#p${addTargetDay + 1} .timeline`);
+  const addBtn = tl.querySelector('.add-item-btn');
+  tl.insertBefore(newEl, addBtn);
+
+  // Render map area
+  const mapArea = newEl.querySelector('.map-area');
+  if (mapArea) renderMapArea(mapArea);
+
+  saveContent();
+  closeAddModal();
+}
+
+// ─── Tabs ────────────────────────────────────────────────────────
+function showDay(n) {
+  document.querySelectorAll('.day-panel').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('p' + n)?.classList.add('active');
+  document.querySelectorAll('.tab')[n - 1]?.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── Init ────────────────────────────────────────────────────────
+loadMaps();
+loadContent();
+renderAll();
+</script>
+</body>
+</html>
